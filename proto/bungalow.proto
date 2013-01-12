@@ -1,0 +1,18 @@
+package com.krikelin.spotify.bungalow;
+
+message User {
+	required string canoncialName = 1;
+	required string realName = 2;
+	required string facebook_id = 3;
+	required string spotify_identifier = 3;
+}
+message Artist {
+	required string identifier = 1;
+	required string name = 2;
+	required User user = 3;
+	repeated Embassadour embassadours = 4;
+}
+message Embassadour {
+	required User user = 1;
+	required Artist artist = 2;
+}

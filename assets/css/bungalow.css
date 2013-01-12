@@ -1,0 +1,48 @@
+body {
+	margin: 0px;
+}
+.divider {
+	width: 100%;
+	background-image: url('../img/divider.png');
+	background-repeat: repeat-x;
+	height: 35px;
+	display: block;
+	box-sizing: border-box;
+	padding: 5px;
+	padding-left: 15px;
+	font-weight: bold;
+}
+.header {
+	background-color: #fafafa;
+	height: 128px;
+	padding: 20px;
+	padding-right: 20%;
+	padding-left: 5%;
+}
+.header > * > *{
+	padding-left: 12px;
+}
+
+.header {
+	padding-left: 15%;
+}
+#points {
+	text-align: right;
+	font-size: 32px;
+	color: #0077ff;
+	font-weight: bold;
+}
+.box {
+	width: 320px;
+	
+	
+	min-height: 320px;
+	/*
+	border: 1px solid #888888;
+background-color: #fafafa;
+	border-radius: 12px;
+	padding: 20px;*/
+}
+section {
+	height: auto;
+}

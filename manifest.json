@@ -1,0 +1,15 @@
+{
+	"AppName": {
+		"en": "Bungalow"
+	},
+	"SupportedLanguages":[
+		"en"
+	],
+	"Dependencies": {
+		"api": "1.0.0",
+		"views": "1.0.0"
+	},
+	"BundleIdentifier": "bungalow",
+	"BundleType": "Application",
+	"BundleVersion": "0.1"
+}
