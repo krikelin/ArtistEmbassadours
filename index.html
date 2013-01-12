@@ -5,13 +5,12 @@
 		<style>
 			@import url('assets/css/bungalow.css');
 
-            @import url('$views/css/base.css');
-            @import url('$views/css/base.desktop.css');
-            @import url('$views/css/buttons.css');
-            @import url('$views/css/image.css');
-            @import url('$views/css/list.css');
-            @import url('$views/css/popup.css');
         </style>
+        <link rel="stylesheet" href="$views/css/list.css">
+		<link rel="stylesheet" href="$views/css/image.css">
+		<link rel="stylesheet" href="$views/css/buttons.css">
+        <link rel="stylesheet" href="$views/css/throbber.css">
+        <link rel="stylesheet" href="$views/css/popup.css">
         <script src="assets/js/bungalow.js" type="text/JavaScript"></script>
 	</head>
 	<body>
@@ -42,7 +41,8 @@
 
 				<article class="box" id="admin">
 					<h1>My embassadours</h1>
-					<ul id="embassadours"></ul>
+					<table id="embassadours"></table>
+					<div class="buttonland"></div>
 				</article>
 				<div class="divider" id="div_admin">Profile</div>
 			</section>
