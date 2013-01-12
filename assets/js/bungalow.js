@@ -18,6 +18,17 @@ embassadour
 	Loads the embassadour collection for the current user
 	@function
 	**/
+	context.EmbassadourCollection.forUser = function (user, callback) {
+		require(['$api/models'], function (models) {
+			user.load('username').done(function (user) {
+				context.EmbassadourCollection.fromURI('spotify:user:' + user.username, callback);
+			});
+		});
+	}
+	/**
+	Loads the embassadour collection for the current user
+	@function
+	**/
 	context.EmbassadourCollection.forCurrentUser = function (callback) {
 		require(['$api/models'], function (models) {
 			new models.Session().user.load('username').done(function (user) {
@@ -152,7 +163,7 @@ embassadour
 				document.querySelector("#username").innerText = artist.name;
 			});
 			// Load embassadours
-			 context.EmbassadourCollection.forCurrentUser(function (collection) {
+			 context.EmbassadourCollection.forUser(user, function (collection) {
 			 	require(['$api/models'] , function (models) {
 				 	console.log(collection);
 				 	var embds = [];
@@ -174,7 +185,7 @@ embassadour
 				 				if(user.username === user2.username) {
 				 					alert('a');
 				 					isAdmin = true;
-				 					document.querySelector('#div_admin').style.display = 'block';
+				 					document.querySelector('#divider_admin').style.display = 'block';
 		
 				 					document.querySelector('#admin').style.display = 'block';
 				 				}
