@@ -132,18 +132,24 @@ embassadour
 		document.querySelector('#admin').style.display = 'none';
 		document.querySelector('#divider_admin').style.display = 'none';
 		document.querySelector('#admin #embassadours').innerHTML = '';
+		document.querySelector('#admin #embassadours').innerHTML = 's';
 
 	}
 	function userLoaded (user) {
 		cleanUI();
 		require(['$api/models'], function(models) {
-			require(['$views/image#Image'], function(Image) {
+			require(['$views/image#Image', '$views/buttons'], function(Image, buttons) {
 			//	document.querySelector("#role").innerHTML = text;
-				var image = Image.fromSource(user.image, {
-				    width: 120,
-				    height: 120
+				var image = Image.forUser(user, {
+				    width: 128,
+				    height: 128,
+				    placeholder: 'user'
 				  })
 				document.querySelector("#imgbox").appendChild(image.node);
+
+				var button = buttons.SubscribeButton.forUser(user);
+				document.querySelector("#role").appendChild(document.createElement('br'));
+				document.querySelector("#role").appendChild(button.node);
 			});
 			console.log(user.artist);
 
@@ -293,59 +299,68 @@ embassadour
 				// Get artists associated with the account
 				var xmlHttp = new XMLHttpRequest();
 				console.log(user);
+				require(['$views/buttons'], function (buttons) {
+					new models.Session().user.load('username').done(function (user2) {
+						if(user.username != user2.username) {
+		 					
+		 					var button = buttons.Button.withLabel('Invite to be embassadour');
+		 					document.querySelector('#role').appendChild(button.node)
+		 				}
+		 			});
+		 		});
 				xmlHttp.open('GET', 'http://home:8080/myproject/bungalow/api/v1_api/user/?format=json&user=' + user.username, true);
 				xmlHttp.onreadystatechange = function () { 
 					if(xmlHttp.readyState == 4) {
 						if(xmlHttp.status == 200) {
-							require(['$api/models', '$views/image#Image', '$views/buttons'], function (models, image, buttons) {
-								new models.Session().user.load('username').done(function (user2) {
-									if(user.username != user2.username) {
-					 					
-					 					var button = buttons.Button.withLabel('Invite to be embassadour');
-					 					document.querySelector('#role').appendChild(button.node)
-					 				}
-					 			});
+							require(['$api/models', '$views/image#Image', '$views/buttons', '$views/popup#Popup'], function (models, Image, buttons, Popup) {
+								
+					 			console.log(xmlHttp.responseText);
 								var data = eval('(' + xmlHttp.responseText + ')');
 								var collection = new context.EmbassadourCollection();
+								console.log('coll', collection.items);
 								data.objects.forEach(function (user) {
 									collection.items.push('spotify:artist:' + user.identifier);
 								});
 								console.log(collection);
 								var promises = [];
 								collection.items.forEach(function (item) {
-									promises.push(models.Artist.fromURI(item).load('image', 'name'));
+									promises.push(models.Artist.fromURI(item).load('image', 'name', 'user'));
 								});
 								var artists = [];
 								var promise = models.Promise.join(promises).each(function (artist) {
-									artists.append(artist);
+									artists.push(artist);
 								}).done(function (artists_) {
+									console.log('g');
 									document.querySelector('#artistdetails').style.display = 'block';
 									document.querySelector('#artistdetails').innerHTML = '<b>Embassadour for</b><ul class=\"flow\" id=\"artistflow\"></ul>';
+									console.log(Image);
 
 									artists.forEach(function (artist) {
-										var image = Image.forArtist(artist, {
-											width: 40,
-											height: 40,
-											placeholder: 'artist',
-											link: artist.uri
-										});
-										var popup = Popup.withText(artist.name);
-							 			console.log(image.node);
-							 			image.node.style.cssFloat = 'right';
-									    image.node.addEventListener('mouseover', showPopup, false);
-									    image.node.addEventListener('mouseout', hidePopup, false);
-									    document.querySelector('artistflow').appendChild(image.node);
-									    function showPopup() {
-									    	// Set the text that is found in the target's data-tooltip attribute
-									   		 // This is just an example, and you can get the text from anywhere
-											// popup.setText(this.getAttribute('data-tooltip'));
+										artist.user.load('name', 'image').done(function (user3) {
+											var image = Image.forUser(user3, {
+												width: 40,
+												height: 40,
+												placeholder: 'artist',
+												link: 'spotify:app:bungalow:user:' + user3.username 
+											});
+											var popup = Popup.withText(artist.name);
+								 			console.log(image.node);
+								 			image.node.style.cssFloat = 'right';
+										    image.node.addEventListener('mouseover', showPopup, false);
+										    image.node.addEventListener('mouseout', hidePopup, false);
+										    document.querySelector('#artistflow').appendChild(image.node);
+										    function showPopup() {
+										    	// Set the text that is found in the target's data-tooltip attribute
+										   		 // This is just an example, and you can get the text from anywhere
+												// popup.setText(this.getAttribute('data-tooltip'));
 
-										 	// Show the popup for this target element
-										    popup.showFor(this);
-									 	}
-									  	function hidePopup() {
-									  	  	popup.hide();
-									 	}
+											 	// Show the popup for this target element
+											    popup.showFor(this);
+										 	}
+										  	function hidePopup() {
+										  	  	popup.hide();
+										 	}
+										});
 									});
 
 								});
