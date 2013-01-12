@@ -9,6 +9,14 @@
 		"api": "1.0.0",
 		"views": "1.0.0"
 	},
+	"DefaultTabs": [
+		{
+			"title": {
+				"en":"Overview"
+			},
+			"arguments": "overview"
+		}
+	],
 	"BundleIdentifier": "bungalow",
 	"BundleType": "Application",
 	"BundleVersion": "0.1"

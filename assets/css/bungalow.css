@@ -35,13 +35,12 @@ body {
 .box {
 	width: 320px;
 	
+	margin: 60px;
 	
-	min-height: 320px;
-	/*
 	border: 1px solid #888888;
 background-color: #fafafa;
 	border-radius: 12px;
-	padding: 20px;*/
+	padding: 20px;
 }
 section {
 	height: auto;

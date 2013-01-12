@@ -118,7 +118,8 @@ embassadour
 		document.querySelector("#artistdetails").style.display = "none";
 		document.querySelector("#role").innerHTML = "";
 		document.querySelector("#imgbox").innerHTML = "";
-		document.querySelector('#div_admin').style.display = 'none';
+		document.querySelector('#admin').style.display = 'none';
+		document.querySelector('#divider_admin').style.display = 'none';
 
 	}
 	function userLoaded (user) {
@@ -171,6 +172,7 @@ embassadour
 					 		new models.Session().user.load('username').done(function (user2) {
 				 				var isAdmin = false;
 				 				if(user.username === user2.username) {
+				 					alert('a');
 				 					isAdmin = true;
 				 					document.querySelector('#div_admin').style.display = 'block';
 		
@@ -251,7 +253,14 @@ embassadour
 			xmlHttp.onreadystatechange = function () { 
 				if(xmlHttp.readyState == 4) {
 					if(xmlHttp.status == 200) {
-						require(['$api/models', '$views/image#Image'], function (models, image) {
+						require(['$api/models', '$views/image#Image', '$views/buttons'], function (models, image, buttons) {
+							new models.Session().user.load('username').done(function (user2) {
+								if(user.username != user2.username) {
+				 					
+				 					var button = buttons.Button.withLabel('Invite to be embassadour');
+				 					document.querySelector('#role').appendChild(button.node)
+				 				}
+				 			});
 							var data = eval('(' + xmlHttp.responseText + ')');
 							var collection = new context.EmbassadourCollection();
 							data.objects.forEach(function (user) {
