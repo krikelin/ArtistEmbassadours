@@ -2,6 +2,7 @@
 	"AppName": {
 		"en": "Bungalow"
 	},
+	"UserInstallable": "false",
 	"SupportedLanguages":[
 		"en"
 	],

@@ -1,18 +1,15 @@
-package com.krikelin.spotify.bungalow;
+package com.spotify.embassador;
 
 message User {
-	required string canoncialName = 1;
-	required string realName = 2;
-	required string facebook_id = 3;
-	required string spotify_identifier = 3;
+	required string username = 3;
 }
 message Artist {
 	required string identifier = 1;
-	required string name = 2;
-	required User user = 3;
-	repeated Embassadour embassadours = 4;
 }
-message Embassadour {
+message Embassador {
 	required User user = 1;
 	required Artist artist = 2;
+	required int32 reputation;
+	required bool user_accepted;
+	required bool artist_accepted;
 }

@@ -146,10 +146,13 @@ embassadour
 				    placeholder: 'user'
 				  })
 				document.querySelector("#imgbox").appendChild(image.node);
-
-				var button = buttons.SubscribeButton.forUser(user);
-				document.querySelector("#role").appendChild(document.createElement('br'));
-				document.querySelector("#role").appendChild(button.node);
+				new models.Session().user.load('username').done(function (user2) {
+					if(user.username !== user2.username) {
+						var button = buttons.SubscribeButton.forUser(user);
+						document.querySelector("#role").appendChild(button.node);
+					}
+					document.querySelector("#role").appendChild(document.createElement('br'));
+				});
 			});
 			console.log(user.artist);
 
@@ -163,8 +166,7 @@ embassadour
 				document.querySelector("#embdetails").style.display = "block";
 				require(['$views/buttons'], function(buttons) {
 
-				  	var button = buttons.Button.withLabel('View artist profile');
-				  	button.setSize('small');
+				  	var button = buttons.CustomButton.withClass('sp-button sp-button-small btn', 'Show discography');
 				 	 button.addEventListener('click', function() {
 				    	self.location = user.artist.uri;
 				  	});
