@@ -52,7 +52,7 @@ embassadour
 						var data = eval('(' + xmlHttp.responseText + ')');
 						var collection = new context.EmbassadourCollection();
 						data.objects.forEach(function (user) {
-							collection.items.push('spotify:user:' + user.username);
+							collection.items.push({user: 'spotify:user:' + user.username, accepted: user.accepted, accepted_artist: user.accepted_artist});
 						});
 						console.log(collection);
 						callback(collection);
@@ -132,7 +132,7 @@ embassadour
 		document.querySelector('#admin').style.display = 'none';
 		document.querySelector('#divider_admin').style.display = 'none';
 		document.querySelector('#admin #embassadours').innerHTML = '';
-		document.querySelector('#admin #embassadours').innerHTML = 's';
+		document.querySelector('#admin #embassadours').innerHTML = '';
 
 	}
 	function userLoaded (user) {
@@ -179,9 +179,11 @@ embassadour
 				 	require(['$api/models'] , function (models) {
 					 	console.log(collection);
 					 	var embds = [];
+					 	var data = [];
 					 	collection.items.forEach(function (item) {
 					 		console.log(item);
-					 		embds.push(models.User.fromURI(item).load('name', 'image'));
+					 		data.push(item)
+					 		embds.push(models.User.fromURI(item.user).load('name', 'image'));
 
 					 	});
 					 	var users = [];
@@ -203,7 +205,7 @@ embassadour
 					 					// add buttons to buttonland
 
 					 				}
-					 			
+					 				var i = 0;
 						 			users.forEach(function (user) {
 
 							 			console.log(user);
@@ -233,9 +235,10 @@ embassadour
 									 	}
 									  	function hidePopup() {
 									  	  	popup.hide();
-									 	 }
-							 			document.querySelector('#embassadours').appendChild(image.node);
-
+									 	}
+									 	if(data[i].accepted) {
+							 				document.querySelector('#embassadours').appendChild(image.node);
+							 			}
 							 			// add to admin
 							 			if (isAdmin) {
 							 				require(['$views/buttons'], function (buttons) {
@@ -260,6 +263,11 @@ embassadour
 									 			n.style.fontSize = '16px';
 									 			n.style.lineHeight = '32px';
 									 			n.innerText = user.username;
+									 			console.log(data);
+
+									 			if(!data[i].accepted) {
+									 				n.innerHTML += '<span style=\"color: #888888\"> (Pending response)</span>';
+									 			}
 									 			//label.appendChild(n);
 									 			var td2 = document.createElement('td');
 
@@ -285,6 +293,7 @@ embassadour
 
 							 				});
 							 			}
+							 			i++;
 							 		});
 						 		});
 						 	});
